@@ -1,0 +1,91 @@
+<div class="phone">
+   <div class="phone-container">
+      <div id="statusbar" class="phone-statusbar">
+         <p style="font-size: 8px;">weemwum<span style="float:right;margin-right:4px;"><i class="fas fa-wifi"></i> {{currentTime |  date:'h:mm a'}}</span></p>
+      </div>
+      <div class="phone-body">
+         <div class="messages-wrapper">
+            <div style="margin-bottom: 30px"></div>
+            <!-- Begin Message Ask -->
+            <div [@askMessageAnimation]="isShowingAsk ? 'visble': 'hidden'" class={{askMessage.class}}>
+            {{askMessage.opener}}
+         </div>
+         <!-- End Message Ask -->
+         <div *ngIf="showTypingBubbles" style="width:20%;" class="message from">
+            <img style="height:30%;width:100%;" src="../assets/images/bubbles.gif" />
+         </div>
+         <div>
+            <div *ngFor="let msg of messages; let i = index;" class={{msg.class}}>
+               <!-- Begin Standard Item Message -->
+               <div *ngIf="msg.id == 'resp' && indexOfMessageClicked !== i">
+                  {{msg.opener}}<em>{{msg.productName}}</em>. -<strong>{{msg.productPrice| currency: 'USD'}}</strong>
+                  <img src={{msg.productImage}} (click)="showProductInfo(i)"/>
+               </div>
+               <!-- End Standard Item Message -->
+               <!-- Begin Full Item Details -->
+               <div *ngIf="indexOfMessageClicked === i" (click)="showProductInfo(undefined)">
+               <h5>{{msg.fullDetails.name}}</h5>
+               <div class="container">
+                  <div class="row">
+                     <div class="col">
+                        <em>avg. rating</em>
+                        <p style="font-weight: bold;">{{msg.fullDetails.aggregated_rating | number: '1.1-1'}} / 5.0</p>
+                     </div>
+                     <div class="col">
+                        <em>item price </em>
+                        <p style="font-weight: bold;">{{msg.productPrice| currency: 'USD'}}</p>
+                     </div>
+                  </div>
+               </div>
+               <img src={{msg.productImage}} />
+               <br />
+               <div class="item-description-body">
+                  {{msg.fullDetails.description}}
+               </div>
+
+               <button type="button" class="btn"><a target="_blank" href="{{msg.fullDetails.url}}">View on {{msg.fullDetails.source.site}}</a></button>
+            </div>
+            <!-- End Full Item Details -->
+            <div *ngIf="msg.id == 'int'">{{msg.opener}}</div>
+         </div>
+      </div>
+   </div>
+   <div *ngIf="showFAB" class="button-bar dropleft">
+      <button id="featured" type="button" style="background-color: #E15554;" class="btn btn-secondary btn-sm" (click)="getTrendingProducts()"><i class="fab fa-hotjar"></i></button>
+      <button id="categories" type="button" class="btn btn-secondary btn-sm" style="background-color: #232C33;" (click)="toggleCategories()">
+      <i class="fas fa-list-ul"></i>
+      </button>
+      <div *ngIf="showCategories" id="categories-block" class="card categories">
+         <div class="card-body">
+            <ul class="list-group list-group-flush">
+               <li class="list-group-item" (click)="searchTopProducts('home')">home</li>
+               <li class="list-group-item" (click)="searchTopProducts('office')">office</li>
+               <li class="list-group-item" (click)="searchTopProducts('clothing')">clothes</li>
+               <li class="list-group-item" (click)="searchTopProducts('beauty')">beauty</li>
+            </ul>
+         </div>
+      </div>
+      <button id="info" type="button" class="btn btn-secondary btn-sm" style="background-color: #3BB273;" (click)="toggleInfo()"><i class="fas fa-info-circle"></i></button>
+      <div *ngIf="showInfo" id="info-block" class="card info">
+         <div class="card-body">
+            <h6>Ever ask a friend for a recommendation?</h6>
+            <p>Frecommended is an Angular5 web app that finds the highest review products for any ask</p>
+            <li><em>type simple queries into the search bar</em></li>
+            <li><em>explore trending products in select catagories by using the buttons</em></li>
+            <br />
+            <p>
+               <span style="text-decoration: underline;">this site is a proof of concept</span>. it is designed to showcase products for an ecommerce store or online catalog in a creative and non-traditional way. the idea hinges on the familiarity most online
+               shoppers have with texting and asking friends for advice. the initial ask query is randomly decided on each page load to keep it fresh and so shoppers could potentially see interesting items they were not originally looking for.
+               the search bar at the bottom allows shoppers to generate a new recommendation query and in a production enviroment, natural language processing would handle the specifics there.
+            </p>
+         </div>
+      </div>
+   </div>
+   <div class="phone-navbar">
+      <input [(ngModel)]="userQuery" #ctrl="ngModel" required type="text" class="form-control no-border" placeholder="search for a specific item .." (focus)="scrollBottom()" (blur)="clearQuery()" (keypress)="onType($event.keyCode)">
+      <i *ngIf="userQuery!==undefined&&userQuery.length>=3" class="fas fa-arrow-circle-up" (mousedown)="preformButtonTask()" id="search" style="float: right;"></i>
+      <i *ngIf="userQuery!==undefined&&userQuery.length<3" class="fas fa-arrow-circle-up disabled" (click)="preformButtonTask()" id="search" style="float: right;"></i>
+      <i *ngIf="userQuery==undefined" class="{{icon}}" (click)="preformButtonTask()" id="search" style="float: right;"></i>
+   </div>
+</div>
+</div>
