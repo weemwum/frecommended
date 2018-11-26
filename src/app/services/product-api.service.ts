@@ -5,10 +5,10 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class ProductAPIService {
-  bestBuyAPIKey: string="pPrybKAtWLDFyFpzdbYFcQrM"; // hidden in commit, obviously
+  bestBuyAPIKey: string=""; // hidden in commit, obviously
   webhoseio = require('webhoseio');
 
-  client = this.webhoseio.config({token: 'd4c320ce-8760-4368-866f-b17d50ab805d'});
+  client = this.webhoseio.config({token: ''});
 //  bestBuyRequestUrl: string="https://api.bestbuy.com/v1/products(search=oven&search=stainless&search=steel)?format=json&show=sku,name,salePrice&apiKey=pPrybKAtWLDFyFpzdbYFcQrM"
   constructor(public http: HttpClient) { }
 
